@@ -20,6 +20,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="YOLO"
-        android:text="YOLO" />
+        android:text="어떤 음식일까요?" />
+
+    <TextView
+        android:id="@+id/foodTv"
+        android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="25sp"
+        tools:text="음식이 아닙니다." />
+
 
 </LinearLayout>

@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -42,6 +43,7 @@ import org.opencv.dnn.Dnn;
 import org.opencv.dnn.Net;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.utils.Converters;
+import org.w3c.dom.Text;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -58,6 +60,7 @@ public class DetectionActivity extends AppCompatActivity {
     private final int MY_PERMISSIONS_REQUEST_CAMERA=1001;
 
     ImageView detectionImageView;
+    TextView foodTv;
     boolean startYolo = false;
     boolean firstTimeYolo = false;
     Net tinyYolo;
@@ -77,6 +80,8 @@ public class DetectionActivity extends AppCompatActivity {
 
         detectionImageView = (ImageView) findViewById(R.id.detectionImageView);
         Glide.with(this).load(url).into( detectionImageView);
+
+        foodTv = (TextView) findViewById(R.id.foodTv);
     }
 
 
@@ -478,11 +483,15 @@ public class DetectionActivity extends AppCompatActivity {
 
                     Imgproc.putText(mat, cocoNames.get(idGuy) + " " + intConf + "%", box.tl(), Core.FONT_HERSHEY_SIMPLEX, 1, new Scalar(255, 255, 0), 2);
                     Imgproc.rectangle(mat, box.tl(), box.br(), new Scalar(255, 0, 0), 2);
-                }
 
-                Imgproc.cvtColor(mat, mat, Imgproc.COLOR_BGR2RGBA);
-                Utils.matToBitmap(mat, bitmap);
-                detectionImageView.setImageBitmap(bitmap);
+                    Imgproc.cvtColor(mat, mat, Imgproc.COLOR_BGR2RGBA);
+                    Utils.matToBitmap(mat, bitmap);
+                    detectionImageView.setImageBitmap(bitmap);
+                    foodTv.setText(cocoNames.get(idGuy) + "입니다!");
+                }
+            }
+            else{
+                foodTv.setText("음식이 아닙니다.");
             }
         }
 

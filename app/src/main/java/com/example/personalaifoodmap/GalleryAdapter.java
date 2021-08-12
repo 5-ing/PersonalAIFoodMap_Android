@@ -56,8 +56,6 @@ public class GalleryAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 String url = (String) getItem(position);
-                Toast.makeText(context, url, Toast.LENGTH_SHORT).show();
-
                 Intent intent = new Intent(view.getContext(), DetectionActivity.class);
                 intent.putExtra("url", url);
                 view.getContext().startActivity(intent);
