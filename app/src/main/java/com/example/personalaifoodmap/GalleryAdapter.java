@@ -19,10 +19,10 @@ import java.util.ArrayList;
 
 public class GalleryAdapter extends BaseAdapter {
 
-    private ArrayList<String> items;
+    private ArrayList<PhotoData> items;
     private Context context;
 
-    public GalleryAdapter(Context context, ArrayList<String> uriArr){
+    public GalleryAdapter(Context context, ArrayList<PhotoData> uriArr){
         this.context = context;
         this.items = uriArr;
     }
@@ -50,17 +50,17 @@ public class GalleryAdapter extends BaseAdapter {
         imageView.setPadding(2,2,2,2);
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         imageView.setLayoutParams(new LinearLayout.LayoutParams(display.widthPixels/3,display.widthPixels/3));
-        Glide.with(context).load(items.get(position)).into(imageView);
+        Glide.with(context).load(items.get(position).uri).into(imageView);
 
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String url = (String) getItem(position);
-                Intent intent = new Intent(view.getContext(), DetectionActivity.class);
-                intent.putExtra("url", url);
-                view.getContext().startActivity(intent);
-            }
-        });
+//        imageView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                String url = (String) getItem(position);
+//                Intent intent = new Intent(view.getContext(), DetectionActivity.class);
+//                intent.putExtra("url", url);
+//                view.getContext().startActivity(intent);
+//            }
+//        });
 
         return imageView;
     }

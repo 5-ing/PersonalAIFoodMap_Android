@@ -14,16 +14,31 @@ import androidx.core.content.ContextCompat;
 
 public class MainActivity extends AppCompatActivity {
 
+    Boolean isFoodGallery = false;
+
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button imageSelectBtn = (Button)findViewById(R.id.imageSelectBtn);
-        imageSelectBtn.setOnClickListener(new View.OnClickListener(){
+        Button allImageBtn = (Button)findViewById(R.id.allImageBtn);
+        allImageBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(MainActivity.this,GalleryActivity.class);
-                startActivity(intent);
+                isFoodGallery = false;
+                Intent intent = new Intent(view.getContext(), GalleryActivity.class);
+                intent.putExtra("isFoodGallery", isFoodGallery);
+                view.getContext().startActivity(intent);
+            }
+        });
+
+        Button foodImageBtn = (Button)findViewById(R.id.foodImageBtn);
+        foodImageBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                isFoodGallery = true;
+                Intent intent = new Intent(view.getContext(), GalleryActivity.class);
+                intent.putExtra("isFoodGallery", isFoodGallery);
+                view.getContext().startActivity(intent);
             }
         });
 

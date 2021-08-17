@@ -4,12 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:gravity="center">
 
     <Button
-        android:id="@+id/imageSelectBtn"
+        android:id="@+id/allImageBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="이미지 선택"/>
+        android:text="모든 이미지 보기"/>
+
+    <Button
+        android:id="@+id/foodImageBtn"
+        android:layout_marginTop="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="YOLO"
+        android:text="음식 이미지 보기" />
+
 
 </LinearLayout>
