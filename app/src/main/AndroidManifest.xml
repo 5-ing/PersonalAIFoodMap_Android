@@ -28,7 +28,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.PersonalAIFoodMap">
-        <activity android:name=".MainActivity">
+
+        <meta-data
+            android:name="com.naver.maps.map.CLIENT_ID"
+            android:value="w5ysdrxbd2" />
+
+        <activity android:name=".MainActivity" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -36,6 +41,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".GalleryActivity"></activity>
+        <activity android:name=".FoodMapActivity"></activity>
     </application>
 
 </manifest>

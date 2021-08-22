@@ -9,17 +9,23 @@
 
     <Button
         android:id="@+id/allImageBtn"
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:text="모든 이미지 보기"/>
 
     <Button
         android:id="@+id/foodImageBtn"
         android:layout_marginTop="30dp"
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:onClick="YOLO"
         android:text="음식 이미지 보기" />
 
+    <Button
+        android:id="@+id/foodMapBtn"
+        android:layout_marginTop="30dp"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:text="음식 지도 보기"/>
 
 </LinearLayout>

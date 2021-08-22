@@ -42,5 +42,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        Button foodMapBtn = (Button)findViewById(R.id.foodMapBtn);
+        foodMapBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), FoodMapActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
 }
