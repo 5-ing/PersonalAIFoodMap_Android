@@ -4,6 +4,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.exifinterface.media.ExifInterface;
 
 import android.Manifest;
 import android.content.Context;
@@ -17,6 +18,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Adapter;
@@ -85,16 +87,12 @@ public class GalleryActivity extends AppCompatActivity {
         }
 
         Intent intent = getIntent();
-        boolean isFoodGallery = intent.getBooleanExtra("isFoodGallery", false);
+        int foodGalleryMode = intent.getIntExtra("foodGalleryMode", 1);
 
-        String tinyYoloCfg = getPath("yolov3-tiny.cfg",this);
-        String tinyYoloWeights = getPath("yolov3-tiny.weights",this);
-        tinyYolo = Dnn.readNetFromDarknet(tinyYoloCfg, tinyYoloWeights);
-
-        getGalleryPhotos(isFoodGallery);
+        getGalleryPhotos(foodGalleryMode);
     }
 
-    private void getGalleryPhotos(boolean isFoodGallery){
+    private void getGalleryPhotos(int foodGalleryMode){
 
         boolean isFood = false;
         ArrayList<PhotoData> uriArr = new ArrayList<>();
@@ -109,25 +107,48 @@ public class GalleryActivity extends AppCompatActivity {
             while (cursor.moveToNext()) {
                 String uri = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA));
                 if(uri!=null) {
-                    if (!isFoodGallery) { //모든 사진 가져오기
+                    if (foodGalleryMode == 1) { //모든 사진 가져오기
                         PhotoData pd = new PhotoData(uri, false);
                         uriArr.add(pd);
-                    } else {
-                        Log.e(TAG,"String 전달 : "+ uri);
+                    } else { //음식 사진 가져오기
                         isFood = imageDetection(uri);
-                        if (isFood) {
-                            PhotoData pd = new PhotoData(uri, true);
-                            uriArr.add(pd);
+                        if(foodGalleryMode == 2) {
+                            if (isFood) {
+                                PhotoData pd = new PhotoData(uri, true);
+                                uriArr.add(pd);
+                            }
+                        }
+                        else if(foodGalleryMode ==3){
+                            if (isFood) {
+                                if(!TextUtils.isEmpty(uri)) {
+                                    PhotoData pd = new PhotoData(uri, true);
+                                    try {
+                                        ExifInterface exif = new ExifInterface(uri);
+                                        pd.lat = pd.getGPS(exif)[0];
+                                        pd.lon = pd.getGPS(exif)[1];
+                                        uriArr.add(pd);
+
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }
                         }
                     }
                 }
             }
             cursor.close();
         }
-
-        GalleryAdapter galleryAdapter = new GalleryAdapter(this,uriArr);
-        gridView.setNumColumns(3); // 한 줄에 3개씩 사진 출력
-        gridView.setAdapter(galleryAdapter);
+        if( foodGalleryMode == 1 || foodGalleryMode == 2) {
+            GalleryAdapter galleryAdapter = new GalleryAdapter(this, uriArr);
+            gridView.setNumColumns(3); // 한 줄에 3개씩 사진 출력
+            gridView.setAdapter(galleryAdapter);
+        }
+        else if(foodGalleryMode == 3) {
+            Intent intent = new Intent(getApplicationContext(), FoodMapActivity.class);
+            intent.putExtra("uriArr", uriArr);
+            startActivity(intent);
+        }
 
     }
 
@@ -154,6 +175,10 @@ public class GalleryActivity extends AppCompatActivity {
     }
 
     public boolean imageDetection(String url) {
+
+        String tinyYoloCfg = getPath("yolov3-tiny.cfg",this);
+        String tinyYoloWeights = getPath("yolov3-tiny.weights",this);
+        tinyYolo = Dnn.readNetFromDarknet(tinyYoloCfg, tinyYoloWeights);
 
         boolean isFood = false;
         Mat mat = new Mat();
@@ -525,3 +550,4 @@ public class GalleryActivity extends AppCompatActivity {
     }
 
 }
+

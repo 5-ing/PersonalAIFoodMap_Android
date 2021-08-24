@@ -14,7 +14,7 @@ import androidx.core.content.ContextCompat;
 
 public class MainActivity extends AppCompatActivity {
 
-    Boolean isFoodGallery = false;
+    int foodGalleryMode = 1;
 
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -24,9 +24,9 @@ public class MainActivity extends AppCompatActivity {
         allImageBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                isFoodGallery = false;
+                foodGalleryMode = 1;
                 Intent intent = new Intent(view.getContext(), GalleryActivity.class);
-                intent.putExtra("isFoodGallery", isFoodGallery);
+                intent.putExtra("isFoodGallery", foodGalleryMode);
                 view.getContext().startActivity(intent);
             }
         });
@@ -35,9 +35,9 @@ public class MainActivity extends AppCompatActivity {
         foodImageBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                isFoodGallery = true;
+                foodGalleryMode = 2;
                 Intent intent = new Intent(view.getContext(), GalleryActivity.class);
-                intent.putExtra("isFoodGallery", isFoodGallery);
+                intent.putExtra("foodGalleryMode", foodGalleryMode);
                 view.getContext().startActivity(intent);
             }
         });
@@ -46,8 +46,10 @@ public class MainActivity extends AppCompatActivity {
         foodMapBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), FoodMapActivity.class);
-                startActivity(intent);
+                foodGalleryMode = 3;
+                Intent intent = new Intent(getApplicationContext(),  GalleryActivity.class);
+                intent.putExtra("foodGalleryMode", foodGalleryMode);
+                view.getContext().startActivity(intent);
             }
         });
 

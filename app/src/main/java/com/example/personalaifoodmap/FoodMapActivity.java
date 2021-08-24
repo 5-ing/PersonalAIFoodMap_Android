@@ -46,11 +46,14 @@ public class FoodMapActivity extends AppCompatActivity implements OnMapReadyCall
 
     private FusedLocationSource mLocationSource;
     private NaverMap mNaverMap;
+    ArrayList<PhotoData> pDataList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_foodmap);
+
+        pDataList = (ArrayList<PhotoData>) getIntent().getSerializableExtra("uriArr");
 
         // 지도 객체 생성
         FragmentManager fm = getSupportFragmentManager();
@@ -69,96 +72,8 @@ public class FoodMapActivity extends AppCompatActivity implements OnMapReadyCall
                 new FusedLocationSource(this, PERMISSION_REQUEST_CODE);
     }
 
-    List<PhotoData> pDataList = new ArrayList<>();
-
-    // 기기 내 모든 이미지 로드 (절대경로 및 위치 정보 포함)
-    public void ImageReady() {
-        Intent intent = new Intent(Intent.ACTION_PICK);
-        intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
-        Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-        String[] projection = {MediaStore.MediaColumns.DATA, MediaStore.MediaColumns.DISPLAY_NAME};
-        Cursor cursor = getContentResolver().query(uri, projection, null, null, MediaStore.MediaColumns.DATE_ADDED);
-        int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
-
-        while (cursor.moveToNext()) {
-            String absolutePath = cursor.getString(columnIndex);
-            if(!TextUtils.isEmpty(absolutePath)) {
-                PhotoData pData = new PhotoData();
-                pData.uri = absolutePath;
-                try {
-                    ExifInterface exif = new ExifInterface(absolutePath);
-                    pData.lat = getGPS(exif)[0];
-                    pData.lon = getGPS(exif)[1];
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                pDataList.add(pData);
-            }
-        }
-    }
-
-    // exif에서 위도, 경도 값 추출
-    public float[] getGPS(ExifInterface exif) {
-        float lat, lon;
-        String attLat = exif.getAttribute(ExifInterface.TAG_GPS_LATITUDE);
-        String attLatR = exif.getAttribute(ExifInterface.TAG_GPS_LATITUDE_REF);
-        String attLon = exif.getAttribute(ExifInterface.TAG_GPS_LONGITUDE);
-        String attLonR = exif.getAttribute(ExifInterface.TAG_GPS_LONGITUDE_REF);
-
-        if (attLat != null && attLatR != null && attLon != null && attLonR != null) {
-            if (attLatR.equals("N")) {
-                lat = convertToDegree(attLat);
-            } else  {
-                lat = 0 - convertToDegree(attLat);
-            }
-
-            if(attLonR.equals("E")) {
-                lon = convertToDegree(attLon);
-            } else {
-                lon = 0 - convertToDegree(attLon);
-            }
-        } else {
-            // 위치 정보 없을 때 0으로 초기화
-            lat = 0;
-            lon = 0;
-        }
-
-        float[] result = new float[2];
-        result[0] = lat;
-        result[1] = lon;
-
-        return result;
-    }
-
-    // exif에서 위도, 경도가 도분초로 표기. 기본 위도 경도로 변환.
-    private float convertToDegree(String stringDms) {
-        String[] dms = stringDms.split(",", 3);
-
-        String[] stringD = dms[0].split("/", 2);
-        double D0 = parseDouble(stringD[0]);
-        double D1 = parseDouble(stringD[1]);
-        double FloatD = D0 / D1;
-
-        String[] stringM = dms[1].split("/", 2);
-        double M0 = parseDouble(stringM[0]);
-        double M1 = parseDouble(stringM[1]);
-        double FloatM = M0 / M1;
-
-        String[] stringS = dms[2].split("/", 2);
-        double S0 = parseDouble(stringS[0]);
-        double S1 = parseDouble(stringS[1]);
-        double FloatS = S0 / S1;
-
-        float result = parseFloat(String.valueOf(FloatD + (FloatM / 60) + (FloatS / 3600)));
-
-        return result;
-    }
-
     @Override
     public void onMapReady(@NonNull NaverMap naverMap) {
-
-        ImageReady();
 
         // 지도상에 마커 표시 (이미지의 위치 정보 기반)
         for (PhotoData photoData : pDataList) {
@@ -180,28 +95,6 @@ public class FoodMapActivity extends AppCompatActivity implements OnMapReadyCall
             }
         }
 
-        // 지도상에 마커 표시 (샘플 마커 3개. 삭제해도 무방.)
-        Marker gmarker = new Marker();
-        gmarker.setPosition(new LatLng(35.53963, 129.31149));
-        gmarker.setMap(naverMap);
-        gmarker.setWidth(100);
-        gmarker.setHeight(100);
-        gmarker.setIcon(OverlayImage.fromResource(R.drawable.yg));
-
-        Marker hmarker = new Marker();
-        hmarker.setPosition(new LatLng(37.65885, 126.77501));
-        hmarker.setMap(naverMap);
-        hmarker.setWidth(100);
-        hmarker.setHeight(100);
-        hmarker.setIcon(OverlayImage.fromResource(R.drawable.yh));
-
-        Marker ymarker = new Marker();
-        ymarker.setPosition(new LatLng(37.50703, 126.72191));
-        ymarker.setMap(naverMap);
-        ymarker.setWidth(100);
-        ymarker.setHeight(100);
-        ymarker.setIcon(OverlayImage.fromResource(R.drawable.sy));
-
         // NaverMap 객체 받아서 NaverMap 객체에 위치 소스 지정
         mNaverMap = naverMap;
         mNaverMap.setLocationSource(mLocationSource);
@@ -221,5 +114,14 @@ public class FoodMapActivity extends AppCompatActivity implements OnMapReadyCall
                 mNaverMap.setLocationTrackingMode(LocationTrackingMode.Follow);
             }
         }
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        return;
+
     }
 }
