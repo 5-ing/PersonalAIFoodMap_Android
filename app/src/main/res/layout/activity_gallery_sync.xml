@@ -8,10 +8,24 @@
     android:gravity="center">
 
     <Button
-        android:id="@+id/startBtn"
+        android:id="@+id/galleryBtn"
         android:layout_marginTop="30dp"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:text="시작하기"/>
+        android:text="갤러리 보기"/>
+
+    <Button
+        android:id="@+id/foodMapBtn"
+        android:layout_marginTop="30dp"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:text="지도 보기"/>
+
+    <Button
+        android:id="@+id/gallerySyncBtn"
+        android:layout_marginTop="30dp"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:text="갤러리 동기화"/>
 
 </LinearLayout>

@@ -3,6 +3,19 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Capstone/PersonalAIFoodMap_AAC/app/src/main/res/layout/activity_food_gallery.xml" value="0.2046875" />
+        <entry key="..\:/Capstone/PersonalAIFoodMap_AAC/app/src/main/res/layout/activity_food_map.xml" value="0.2046875" />
+        <entry key="..\:/Capstone/PersonalAIFoodMap_AAC/app/src/main/res/layout/activity_foodmap.xml" value="0.2046875" />
+        <entry key="..\:/Capstone/PersonalAIFoodMap_AAC/app/src/main/res/layout/activity_gallery.xml" value="0.2046875" />
+        <entry key="..\:/Capstone/PersonalAIFoodMap_AAC/app/src/main/res/layout/activity_gallery_sync.xml" value="0.18" />
+        <entry key="..\:/Capstone/PersonalAIFoodMap_AAC/app/src/main/res/layout/activity_main.xml" value="0.10507246376811594" />
+        <entry key="..\:/Capstone/PersonalAIFoodMap_AAC/app/src/main/res/layout/fragment_foodmap.xml" value="0.1" />
+        <entry key="..\:/Capstone/PersonalAIFoodMap_AAC/app/src/main/res/layout/google_maps_api.xml" value="0.2703125" />
+        <entry key="..\:/Capstone/PersonalAIFoodMap_AAC_Kotlin/app/src/main/res/layout/activity_food_gallery.xml" value="0.18" />
+        <entry key="..\:/Capstone/PersonalAIFoodMap_AAC_Kotlin/app/src/main/res/layout/activity_food_map.xml" value="0.24635416666666668" />
+        <entry key="..\:/Capstone/PersonalAIFoodMap_AAC_Kotlin/app/src/main/res/layout/activity_gallery_sync.xml" value="0.24635416666666668" />
+        <entry key="..\:/Capstone/PersonalAIFoodMap_AAC_Kotlin/app/src/main/res/layout/activity_main.xml" value="0.24635416666666668" />
+        <entry key="..\:/Capstone/PersonalAIFoodMap_AAC_Kotlin/app/src/main/res/layout/list_item.xml" value="0.24635416666666668" />
         <entry key="..\:/GitHub/PersonalAIFoodMap/app/src/main/res/drawable/ic_launcher_background.xml" value="0.2962962962962963" />
         <entry key="..\:/GitHub/PersonalAIFoodMap/app/src/main/res/layout/activity_foodmap.xml" value="0.31521739130434784" />
         <entry key="..\:/GitHub/PersonalAIFoodMap/app/src/main/res/layout/activity_gallery.xml" value="0.31521739130434784" />
