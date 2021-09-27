@@ -53,13 +53,6 @@ abstract class UserPhotoDatabase : RoomDatabase() {
 
             suspend fun populateDatabase(userPhotoDao: UserPhotoDao) {
 
-                //처음 삽입
-//                userPhotoDao.deleteAll()
-//
-//                var word = Word("Hello")
-//                wordDao.insert(word)
-//                word = Word("World!")
-//                wordDao.insert(word)
 
             }
         }
