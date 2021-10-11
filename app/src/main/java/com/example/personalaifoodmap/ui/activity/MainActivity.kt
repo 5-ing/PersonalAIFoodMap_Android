@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun startApp() {
-        val intent = Intent(this, GallerySyncActivity::class.java)
+        val intent = Intent(this, FoodMapActivity::class.java)
         startActivity(intent)
     }
 

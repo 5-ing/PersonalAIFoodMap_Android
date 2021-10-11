@@ -2,23 +2,35 @@ package com.example.personalaifoodmap.ui.activity
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.widget.ImageView
+import android.widget.RelativeLayout
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.personalaifoodmap.viewmodels.FoodMapViewModel
 import com.naver.maps.map.util.FusedLocationSource
 import com.naver.maps.map.NaverMap
 import com.naver.maps.map.overlay.OverlayImage
 import androidx.core.app.ActivityCompat
+import androidx.core.net.toUri
 import com.example.personalaifoodmap.databinding.ActivityFoodMapBinding
 import androidx.lifecycle.observe
+import com.bumptech.glide.Glide
 import com.example.personalaifoodmap.FoodMapApplication
+import com.example.personalaifoodmap.R
 import com.example.personalaifoodmap.viewmodels.FoodMapViewModelFactory
 import com.example.personalaifoodmap.viewmodels.GallerySyncViewModelFactory
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.LocationTrackingMode
 import com.naver.maps.map.OnMapReadyCallback
 import com.naver.maps.map.overlay.Marker
+import java.net.URI
 
 internal class FoodMapActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -28,6 +40,7 @@ internal class FoodMapActivity : AppCompatActivity(), OnMapReadyCallback {
     }
     private lateinit var mNaverMap: NaverMap
     private lateinit var mLocationSource : FusedLocationSource
+    private lateinit var markerView: View
 
     companion object {
         private const val PERMISSION_REQUEST_CODE = 100
@@ -47,9 +60,19 @@ internal class FoodMapActivity : AppCompatActivity(), OnMapReadyCallback {
         val mapView = binding.foodMapView
         mapView.onCreate(savedInstanceState)
 
+        markerView = LayoutInflater.from(this).inflate(R.layout.marker_item,null)
+
         // getMapAsync를 호출하여 비동기로 onMapReady 콜백 메서드 호출
         // onMapReady에서 naverMap 객체를 받음
         mapView.getMapAsync(this)
+    }
+
+    fun getCustomMarker(uri : String): View{
+        val markerFrame = markerView.findViewById<ConstraintLayout>(R.id.marker_frame)
+        val markerIv =  markerView.findViewById<ImageView>(R.id.marker_iv)
+        markerIv.setImageURI(uri.toUri())
+
+        return markerFrame
     }
 
     override fun onMapReady(naverMap: NaverMap) {
@@ -75,9 +98,7 @@ internal class FoodMapActivity : AppCompatActivity(), OnMapReadyCallback {
                         val marker = Marker()
                         marker.position = LatLng(x.toDouble(), y.toDouble())
                         marker.map = naverMap
-                        marker.width = 100
-                        marker.height = 100
-                        marker.icon = userPhoto.uri.let { OverlayImage.fromPath(it) }
+                        marker.icon = OverlayImage.fromView(getCustomMarker(userPhoto.uri))
                         println(userPhoto.uri)
                     }
                 }

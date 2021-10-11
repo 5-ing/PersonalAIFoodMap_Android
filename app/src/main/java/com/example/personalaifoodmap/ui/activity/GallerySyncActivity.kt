@@ -36,8 +36,7 @@ class GallerySyncActivity : AppCompatActivity() {
 
     private fun onClickFoodMap() {
         binding.foodMapBtn.setOnClickListener {
-            val intent = Intent(this, FoodMapActivity::class.java)
-            startActivity(intent)
+
         }
     }
 
