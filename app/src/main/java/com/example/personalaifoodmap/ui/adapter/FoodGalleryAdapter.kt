@@ -1,6 +1,5 @@
 package com.example.personalaifoodmap.ui.adapter
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,7 +32,7 @@ class FoodGalleryAdapter : ListAdapter<UserPhoto, FoodGalleryAdapter.UserPhotoVi
         companion object {
             fun create(parent: ViewGroup): UserPhotoViewHolder {
                 val view: View = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.list_item, parent, false)
+                    .inflate(R.layout.item_list, parent, false)
                 return UserPhotoViewHolder(view)
             }
         }

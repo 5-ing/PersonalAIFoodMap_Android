@@ -13,7 +13,7 @@
         android:background="@color/white"
         android:padding="5dp"
         android:scaleType="fitXY"
-        android:src="@color/black"
+        android:src="#C4C4C4"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

@@ -2,13 +2,10 @@ package com.example.personalaifoodmap.ui.activity
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.Canvas
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
-import android.widget.RelativeLayout
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -20,17 +17,13 @@ import androidx.core.app.ActivityCompat
 import androidx.core.net.toUri
 import com.example.personalaifoodmap.databinding.ActivityFoodMapBinding
 import androidx.lifecycle.observe
-import com.bumptech.glide.Glide
 import com.example.personalaifoodmap.FoodMapApplication
 import com.example.personalaifoodmap.R
 import com.example.personalaifoodmap.viewmodels.FoodMapViewModelFactory
-import com.example.personalaifoodmap.viewmodels.GallerySyncViewModelFactory
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.LocationTrackingMode
 import com.naver.maps.map.OnMapReadyCallback
 import com.naver.maps.map.overlay.Marker
-import java.net.URI
 
 internal class FoodMapActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -60,7 +53,7 @@ internal class FoodMapActivity : AppCompatActivity(), OnMapReadyCallback {
         val mapView = binding.foodMapView
         mapView.onCreate(savedInstanceState)
 
-        markerView = LayoutInflater.from(this).inflate(R.layout.marker_item,null)
+        markerView = LayoutInflater.from(this).inflate(R.layout.item_marker,null)
 
         // getMapAsync를 호출하여 비동기로 onMapReady 콜백 메서드 호출
         // onMapReady에서 naverMap 객체를 받음
