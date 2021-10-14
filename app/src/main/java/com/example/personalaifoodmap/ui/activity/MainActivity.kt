@@ -6,11 +6,18 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.Handler
+import android.view.LayoutInflater
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import com.example.personalaifoodmap.FoodMapApplication
+import com.example.personalaifoodmap.R
 import com.example.personalaifoodmap.databinding.ActivityMainBinding
 import com.example.personalaifoodmap.ui.activity.MainActivity
 import com.example.personalaifoodmap.ui.activity.GallerySyncActivity
+import kotlinx.coroutines.delay
+import java.util.*
+import kotlin.concurrent.timer
 
 class MainActivity : AppCompatActivity() {
 
@@ -22,6 +29,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_REQUEST_CODE)
         onClickStart()
+        onClickGallerySync()
     }
 
     private fun onClickStart() {
@@ -37,9 +45,25 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun onClickGallerySync() {
+        binding.gallerySyncBtn.setOnClickListener {
+            val intent = Intent(this, GallerySyncActivity::class.java)
+            startActivity(intent)
+        }
+    }
+
     private fun startApp() {
-        val intent = Intent(this, FoodMapActivity::class.java)
-        startActivity(intent)
+
+        setContentView(R.layout.splash_map)
+        Handler().postDelayed({
+            val intent = Intent(this, FoodMapActivity::class.java)
+            startActivity(intent)
+        }, 3000)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        setContentView(binding.root)
     }
 
     private fun hasPermissions(context: Context?, permissions: Array<String>?): Boolean {

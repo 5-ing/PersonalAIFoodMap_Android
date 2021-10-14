@@ -2,8 +2,11 @@ package com.example.personalaifoodmap.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import com.example.personalaifoodmap.viewmodels.GallerySyncViewModel
 import com.example.personalaifoodmap.ui.activity.FoodMapActivity
 import androidx.lifecycle.ViewModelProvider
@@ -22,27 +25,13 @@ class GallerySyncActivity : AppCompatActivity() {
         binding = ActivityGallerySyncBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        onClickShowGallery()
-        onClickFoodMap()
-        onClickGallerySync()
+        gallerySyncViewModel.startSync()
+
+        gallerySyncViewModel.showCompleteMessage.observe(this, Observer {
+            Toast.makeText(this.getApplicationContext(),"갤러리 로딩 완료!", Toast.LENGTH_LONG).show()
+            finish()
+        })
+
     }
 
-    private fun onClickShowGallery() {
-        binding.galleryBtn.setOnClickListener {
-            val intent = Intent(this, FoodGalleryActivity::class.java)
-            startActivity(intent)
-        }
-    }
-
-    private fun onClickFoodMap() {
-        binding.foodMapBtn.setOnClickListener {
-
-        }
-    }
-
-    private fun onClickGallerySync() {
-        binding.gallerySyncBtn.setOnClickListener {
-            gallerySyncViewModel.startSync()
-        }
-    }
 }

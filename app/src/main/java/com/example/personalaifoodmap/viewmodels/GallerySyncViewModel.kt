@@ -1,22 +1,31 @@
 package com.example.personalaifoodmap.viewmodels
-
 import android.provider.MediaStore
 import androidx.lifecycle.*
+import com.example.personalaifoodmap.Event
 import com.example.personalaifoodmap.FoodMapApplication
 import com.example.personalaifoodmap.data.UserPhoto
-import com.example.personalaifoodmap.repository.FoodGalleryRepository
-import com.example.personalaifoodmap.repository.FoodMapRepository
 import com.example.personalaifoodmap.repository.GallerySyncRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class GallerySyncViewModel (
     private val repository: GallerySyncRepository
     ) : ViewModel() {
 
     val userFoodPhotos: LiveData<List<UserPhoto>> = repository.userPhotos.asLiveData()
+    private val _showCompleteMessage = MutableLiveData<Event<Boolean>>()
+    val showCompleteMessage: LiveData<Event<Boolean>> = _showCompleteMessage
 
     fun startSync(){
-        getGalleryCursor()
+        CoroutineScope(IO).launch {
+            getGalleryCursor()
+            withContext(Main){
+                _showCompleteMessage.value = Event(true)
+            }
+        }
     }
 
     fun insert(userPhoto: UserPhoto) = viewModelScope.launch{

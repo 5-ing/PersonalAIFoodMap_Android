@@ -1,31 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center">
+    android:background="@drawable/sync_splash">
 
-    <Button
-        android:id="@+id/galleryBtn"
-        android:layout_marginTop="30dp"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:text="갤러리 보기"/>
+    <ImageView
+        android:id="@+id/syncMessageIv"
+        android:layout_width="240dp"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="60dp"
+        android:src="@drawable/sync_message"
+        android:visibility="visible"
+        tools:visibility="visible"/>
 
-    <Button
-        android:id="@+id/foodMapBtn"
-        android:layout_marginTop="30dp"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:text="지도 보기"/>
-
-    <Button
-        android:id="@+id/gallerySyncBtn"
-        android:layout_marginTop="30dp"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:text="갤러리 동기화"/>
-
-</LinearLayout>
+</RelativeLayout>

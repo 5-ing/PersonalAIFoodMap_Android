@@ -7,7 +7,7 @@ import com.example.personalaifoodmap.data.UserPhoto
 
 class FoodMapViewModel (
     private val repository: FoodMapRepository
-    ) : ViewModel() {
+) : ViewModel() {
 
     //val userFoodPhotos: LiveData<List<UserPhoto>> = repository.userPhotos.asLiveData()
 

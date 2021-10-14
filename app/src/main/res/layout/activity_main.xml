@@ -17,9 +17,17 @@
 
     <ImageButton
         android:id="@+id/startBtn"
-        android:layout_width="81dp"
-        android:layout_height="72dp"
+        android:layout_width="100dp"
+        android:layout_height="32dp"
         android:src="@drawable/start_btn"
+        android:background="#00FFFFFF"/>
+
+    <ImageButton
+        android:layout_marginTop="29dp"
+        android:id="@+id/gallerySyncBtn"
+        android:layout_width="100dp"
+        android:layout_height="32dp"
+        android:src="@drawable/gallery_sync_btn"
         android:background="#00FFFFFF"/>
 
 </LinearLayout>

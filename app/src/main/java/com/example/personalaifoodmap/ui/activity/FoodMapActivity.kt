@@ -3,6 +3,7 @@ package com.example.personalaifoodmap.ui.activity
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
@@ -15,15 +16,20 @@ import com.naver.maps.map.NaverMap
 import com.naver.maps.map.overlay.OverlayImage
 import androidx.core.app.ActivityCompat
 import androidx.core.net.toUri
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
 import com.example.personalaifoodmap.databinding.ActivityFoodMapBinding
 import androidx.lifecycle.observe
 import com.example.personalaifoodmap.FoodMapApplication
 import com.example.personalaifoodmap.R
+import com.example.personalaifoodmap.data.UserPhoto
 import com.example.personalaifoodmap.viewmodels.FoodMapViewModelFactory
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.LocationTrackingMode
 import com.naver.maps.map.OnMapReadyCallback
 import com.naver.maps.map.overlay.Marker
+import kotlin.concurrent.timer
 
 internal class FoodMapActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -58,6 +64,7 @@ internal class FoodMapActivity : AppCompatActivity(), OnMapReadyCallback {
         // getMapAsync를 호출하여 비동기로 onMapReady 콜백 메서드 호출
         // onMapReady에서 naverMap 객체를 받음
         mapView.getMapAsync(this)
+
     }
 
     fun getCustomMarker(uri : String): View{
@@ -79,25 +86,22 @@ internal class FoodMapActivity : AppCompatActivity(), OnMapReadyCallback {
         mLocationSource = FusedLocationSource(this, PERMISSION_REQUEST_CODE)
         mNaverMap.locationSource = mLocationSource
 
-        // 지도상에 마커 표시 (이미지의 위치 정보 기반)
-        foodMapViewModel.getFoodPhotoLocation().observe(owner = this) { photos ->
-            // import androidx.lifecycle.observe 를 추가해야 owner 부분 오류 안뜸
-            photos.let {
-                for (userPhoto in photos) {
-                    val x: Float = userPhoto.lat
-                    val y: Float = userPhoto.lon
-                    // 초기값인 0이 아니면 마커 표시
-                    if (x != 0f && y != 0f) {
-                        val marker = Marker()
-                        marker.position = LatLng(x.toDouble(), y.toDouble())
-                        marker.map = naverMap
-                        marker.icon = OverlayImage.fromView(getCustomMarker(userPhoto.uri))
-                        println(userPhoto.uri)
-                    }
+        val userPhotoObserver = Observer<List<UserPhoto>> { photos ->
+            for (userPhoto in photos) {
+                val x: Float = userPhoto.lat
+                val y: Float = userPhoto.lon
+                // 초기값인 0이 아니면 마커 표시
+                if (x != 0f && y != 0f) {
+                    val marker = Marker()
+                    marker.position = LatLng(x.toDouble(), y.toDouble())
+                    marker.map = naverMap
+                    marker.icon = OverlayImage.fromView(getCustomMarker(userPhoto.uri))
+                    println(userPhoto.uri)
                 }
             }
         }
 
+        foodMapViewModel.getFoodPhotoLocation().observe(this, userPhotoObserver)
     }
 
     override fun onRequestPermissionsResult(
