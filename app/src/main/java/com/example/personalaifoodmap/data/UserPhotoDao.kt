@@ -26,5 +26,5 @@ interface UserPhotoDao {
     fun getFoodPhoto(isFood: Boolean?): Flow<List<UserPhoto>>
 
     @Query("SELECT * FROM user_photo_table WHERE isFood = :isFood AND NOT lat =:lat AND NOT lon =:lon")
-    fun getFoodPhotoLocation(isFood: Boolean?, lat: Float, lon: Float): Flow<List<UserPhoto>>
+    fun getFoodPhotoLocation(isFood: Boolean?, lat: Double, lon: Double): Flow<List<UserPhoto>>
 }

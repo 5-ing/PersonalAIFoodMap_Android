@@ -1,123 +1,152 @@
 package com.example.personalaifoodmap.ui.activity
 
 import android.Manifest
+import android.content.ContentValues.TAG
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.Location
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDialog
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.personalaifoodmap.viewmodels.FoodMapViewModel
-import com.naver.maps.map.util.FusedLocationSource
-import com.naver.maps.map.NaverMap
-import com.naver.maps.map.overlay.OverlayImage
 import androidx.core.app.ActivityCompat
 import androidx.core.net.toUri
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import com.example.personalaifoodmap.databinding.ActivityFoodMapBinding
-import androidx.lifecycle.observe
 import com.example.personalaifoodmap.FoodMapApplication
+import com.example.personalaifoodmap.ui.MarkerRenderer
 import com.example.personalaifoodmap.R
 import com.example.personalaifoodmap.data.UserPhoto
 import com.example.personalaifoodmap.viewmodels.FoodMapViewModelFactory
-import com.naver.maps.geometry.LatLng
-import com.naver.maps.map.LocationTrackingMode
-import com.naver.maps.map.OnMapReadyCallback
-import com.naver.maps.map.overlay.Marker
-import kotlin.concurrent.timer
+import com.google.android.gms.location.*
+import com.google.android.gms.maps.*
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.MarkerOptions
+import com.google.maps.android.clustering.Cluster
+import com.google.maps.android.clustering.ClusterManager
+import com.google.maps.android.clustering.ClusterManager.OnClusterClickListener
+import com.google.maps.android.clustering.ClusterManager.OnClusterItemClickListener
+import com.google.maps.android.clustering.view.DefaultClusterRenderer
+import java.util.ArrayList
 
-internal class FoodMapActivity : AppCompatActivity(), OnMapReadyCallback {
+internal class FoodMapActivity : AppCompatActivity(), OnMapReadyCallback{
 
     private lateinit var binding: ActivityFoodMapBinding
     private val foodMapViewModel : FoodMapViewModel by viewModels(){
         FoodMapViewModelFactory((application as FoodMapApplication).foodMapRepository)
     }
-    private lateinit var mNaverMap: NaverMap
-    private lateinit var mLocationSource : FusedLocationSource
-    private lateinit var markerView: View
 
-    companion object {
-        private const val PERMISSION_REQUEST_CODE = 100
-        private val PERMISSIONS = arrayOf(
-            Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.ACCESS_COARSE_LOCATION,
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.INTERNET
-        )
-    }
+    private lateinit var mGoogleMap: GoogleMap
+    private lateinit var currentLocation: Location
+    private lateinit var clusterManager: ClusterManager<UserPhoto>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFoodMapBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val mapView = binding.foodMapView
-        mapView.onCreate(savedInstanceState)
-
-        markerView = LayoutInflater.from(this).inflate(R.layout.item_marker,null)
-
-        // getMapAsync를 호출하여 비동기로 onMapReady 콜백 메서드 호출
-        // onMapReady에서 naverMap 객체를 받음
-        mapView.getMapAsync(this)
-
+        startFoodMap()
     }
 
-    fun getCustomMarker(uri : String): View{
-        val markerFrame = markerView.findViewById<ConstraintLayout>(R.id.marker_frame)
-        val markerIv =  markerView.findViewById<ImageView>(R.id.marker_iv)
-        markerIv.setImageURI(uri.toUri())
-
-        return markerFrame
+    fun startFoodMap(){
+        val mapFragment:SupportMapFragment = supportFragmentManager.findFragmentById(R.id.foodMapFragment) as SupportMapFragment
+        mapFragment.getMapAsync(this)
     }
 
-    override fun onMapReady(naverMap: NaverMap) {
+    override fun onMapReady(googleMap: GoogleMap) {
 
-        this.mNaverMap = naverMap
+        // 지도 연결
+        this.mGoogleMap = googleMap
 
-        // 권한확인. 결과는 onRequestPermissionsResult 콜백 매서드 호출
-        ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_REQUEST_CODE)
+        // 현재 위치 표시
+        setCurrentLocation()
 
-        // 현재위치 표시
-        mLocationSource = FusedLocationSource(this, PERMISSION_REQUEST_CODE)
-        mNaverMap.locationSource = mLocationSource
+        // 클러스터링
+        clusterManager = ClusterManager(this, mGoogleMap)
+        mGoogleMap.setOnCameraIdleListener(clusterManager)
+        clickCluster()
+        clickClusterItem()
 
-        val userPhotoObserver = Observer<List<UserPhoto>> { photos ->
-            for (userPhoto in photos) {
-                val x: Float = userPhoto.lat
-                val y: Float = userPhoto.lon
-                // 초기값인 0이 아니면 마커 표시
-                if (x != 0f && y != 0f) {
-                    val marker = Marker()
-                    marker.position = LatLng(x.toDouble(), y.toDouble())
-                    marker.map = naverMap
-                    marker.icon = OverlayImage.fromView(getCustomMarker(userPhoto.uri))
-                    println(userPhoto.uri)
+        // 마커 표시
+        val markerRenderer = MarkerRenderer( this, mGoogleMap, clusterManager)
+        clusterManager.renderer = markerRenderer
+        foodMapViewModel.userFoodPhotos.observe(this, Observer {
+            for(userPhoto in it){
+                clusterManager.addItem(userPhoto)
+            }
+        })
+    }
+
+    fun clickCluster(){
+        clusterManager.setOnClusterClickListener {
+            val intent = Intent( this,ClusterListActivity::class.java )
+            val clusterList = arrayListOf<UserPhoto>()
+            for (photoData in it.items) {
+                clusterList.add(photoData)
+            }
+            intent.putExtra("clusterList", clusterList)
+            startActivity(intent)
+            false
+        }
+    }
+
+    fun clickClusterItem(){
+        clusterManager.setOnClusterItemClickListener{
+            val intent = Intent(this,RestaurantDetailActivity::class.java)
+            intent.putExtra("img_info", it)
+            startActivity(intent)
+            false
+        }
+    }
+
+    fun setCurrentLocation(){
+        checkLocationPermission()
+        val locationRequest = LocationRequest().setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+        val locationCallback = object: LocationCallback() {
+            override fun onLocationResult(locationResult: LocationResult?) {
+                locationResult?.let {
+                    currentLocation = it.lastLocation
+                    drawCurrentLocation()
                 }
             }
         }
 
-        foodMapViewModel.getFoodPhotoLocation().observe(this, userPhotoObserver)
+        val fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper())
+        mGoogleMap.isMyLocationEnabled = true
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    fun drawCurrentLocation(){
+        val latLng = LatLng(currentLocation.latitude, currentLocation.longitude)
+        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng))
+        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,14f))
+    }
 
-        // 권한획득 여부 확인
-        if (requestCode == PERMISSION_REQUEST_CODE) {
-            if (grantResults.isNotEmpty()
-                && grantResults[0] == PackageManager.PERMISSION_GRANTED
-            ) {
-                mNaverMap.locationTrackingMode = LocationTrackingMode.Follow
-            }
+    fun checkLocationPermission(){
+        val permissionCode = 101
+        if (ActivityCompat.checkSelfPermission(
+                this, Manifest.permission.ACCESS_FINE_LOCATION) !=
+            PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this, Manifest.permission.ACCESS_COARSE_LOCATION) !=
+            PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), permissionCode)
+            return
         }
     }
+
 }

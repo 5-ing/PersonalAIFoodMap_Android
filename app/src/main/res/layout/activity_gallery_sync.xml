@@ -14,8 +14,6 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_marginBottom="60dp"
-        android:src="@drawable/sync_message"
-        android:visibility="visible"
-        tools:visibility="visible"/>
+        android:src="@drawable/sync_message" />
 
 </RelativeLayout>

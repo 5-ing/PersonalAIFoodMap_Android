@@ -25,10 +25,10 @@ class GallerySyncActivity : AppCompatActivity() {
         binding = ActivityGallerySyncBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        gallerySyncViewModel.startSync()
+        gallerySyncViewModel.gallerySync()
 
-        gallerySyncViewModel.showCompleteMessage.observe(this, Observer {
-            Toast.makeText(this.getApplicationContext(),"갤러리 로딩 완료!", Toast.LENGTH_LONG).show()
+        gallerySyncViewModel.syncCompletion.observe(this, Observer {
+            Toast.makeText(applicationContext,"갤러리 로딩 완료!", Toast.LENGTH_LONG).show()
             finish()
         })
 

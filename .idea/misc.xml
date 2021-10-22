@@ -24,14 +24,15 @@
         <entry key="..\:/GitHub/PersonalAIFoodMap/app/src/main/res/drawable/icon_background.xml" value="0.265625" />
         <entry key="..\:/GitHub/PersonalAIFoodMap/app/src/main/res/layout-v21/activity_main.xml" value="0.20625" />
         <entry key="..\:/GitHub/PersonalAIFoodMap/app/src/main/res/layout-v31/activity_main.xml" value="0.20625" />
+        <entry key="..\:/GitHub/PersonalAIFoodMap/app/src/main/res/layout/activity_cluster_list.xml" value="0.25905797101449274" />
         <entry key="..\:/GitHub/PersonalAIFoodMap/app/src/main/res/layout/activity_detail.xml" value="0.26902173913043476" />
         <entry key="..\:/GitHub/PersonalAIFoodMap/app/src/main/res/layout/activity_food_gallery.xml" value="0.22282608695652173" />
-        <entry key="..\:/GitHub/PersonalAIFoodMap/app/src/main/res/layout/activity_food_map.xml" value="0.10030395136778116" />
+        <entry key="..\:/GitHub/PersonalAIFoodMap/app/src/main/res/layout/activity_food_map.xml" value="0.1" />
         <entry key="..\:/GitHub/PersonalAIFoodMap/app/src/main/res/layout/activity_foodmap.xml" value="0.31521739130434784" />
         <entry key="..\:/GitHub/PersonalAIFoodMap/app/src/main/res/layout/activity_gallery.xml" value="0.31521739130434784" />
         <entry key="..\:/GitHub/PersonalAIFoodMap/app/src/main/res/layout/activity_gallery_sync.xml" value="0.2" />
         <entry key="..\:/GitHub/PersonalAIFoodMap/app/src/main/res/layout/activity_main.xml" value="0.22282608695652173" />
-        <entry key="..\:/GitHub/PersonalAIFoodMap/app/src/main/res/layout/activity_restaurant_detail.xml" value="0.25" />
+        <entry key="..\:/GitHub/PersonalAIFoodMap/app/src/main/res/layout/activity_restaurant_detail.xml" value="0.33" />
         <entry key="..\:/GitHub/PersonalAIFoodMap/app/src/main/res/layout/cluster_item.xml" value="0.5787401574803149" />
         <entry key="..\:/GitHub/PersonalAIFoodMap/app/src/main/res/layout/item_cluster.xml" value="0.26902173913043476" />
         <entry key="..\:/GitHub/PersonalAIFoodMap/app/src/main/res/layout/item_list.xml" value="0.25" />
@@ -39,7 +40,7 @@
         <entry key="..\:/GitHub/PersonalAIFoodMap/app/src/main/res/layout/item_restaurant_recomend.xml" value="0.3088768115942029" />
         <entry key="..\:/GitHub/PersonalAIFoodMap/app/src/main/res/layout/list_item.xml" value="0.24895833333333334" />
         <entry key="..\:/GitHub/PersonalAIFoodMap/app/src/main/res/layout/marker_item.xml" value="0.67" />
-        <entry key="..\:/GitHub/PersonalAIFoodMap/app/src/main/res/layout/splash_map.xml" value="0.2557291666666667" />
+        <entry key="..\:/GitHub/PersonalAIFoodMap/app/src/main/res/layout/splash_map.xml" value="0.1" />
         <entry key="..\:/GitHub/PersonalAIFoodMap/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.265625" />
         <entry key="..\:/GitHub/PersonalAIFoodMap/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.265625" />
         <entry key="..\:/GitHub/PersonalAIFoodMap/app/src/main/res/mipmap-anydpi-v26/icon.xml" value="0.265625" />

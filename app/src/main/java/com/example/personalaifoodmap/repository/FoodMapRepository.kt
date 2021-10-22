@@ -12,6 +12,6 @@ import kotlinx.coroutines.flow.Flow
 class FoodMapRepository(private val userPhotoDao: UserPhotoDao) {
 
     fun getFoodPhotoLocation() : Flow<List<UserPhoto>>{
-        return userPhotoDao.getFoodPhotoLocation(true, 0f, 0f)
+        return userPhotoDao.getFoodPhotoLocation(true, 0.0, 0.0)
     }
 }

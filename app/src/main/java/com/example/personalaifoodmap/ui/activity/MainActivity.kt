@@ -53,17 +53,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun startApp() {
-
-        setContentView(R.layout.splash_map)
-        Handler().postDelayed({
-            val intent = Intent(this, FoodMapActivity::class.java)
-            startActivity(intent)
-        }, 3000)
-    }
-
-    override fun onStart() {
-        super.onStart()
-        setContentView(binding.root)
+        val intent = Intent(this, FoodMapActivity::class.java)
+        startActivity(intent)
     }
 
     private fun hasPermissions(context: Context?, permissions: Array<String>?): Boolean {

@@ -1,19 +1,41 @@
 package com.example.personalaifoodmap.viewmodels
 
+import android.Manifest
 import android.app.Application
+import android.content.pm.PackageManager
+import android.location.Location
+import androidx.core.app.ActivityCompat
 import androidx.lifecycle.*
+import com.example.personalaifoodmap.FoodMapApplication
+import com.example.personalaifoodmap.R
 import com.example.personalaifoodmap.repository.FoodMapRepository
 import com.example.personalaifoodmap.data.UserPhoto
+import com.example.personalaifoodmap.ui.MarkerRenderer
+import com.example.personalaifoodmap.ui.activity.FoodMapActivity
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.maps.SupportMapFragment
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class FoodMapViewModel (
-    private val repository: FoodMapRepository
+    private val foodMapRepository: FoodMapRepository
 ) : ViewModel() {
 
-    //val userFoodPhotos: LiveData<List<UserPhoto>> = repository.userPhotos.asLiveData()
+    init {
+        viewModelScope.launch(Dispatchers.IO) {
+            getFoodPhotoLocation()
+        }
+    }
 
-    //음식 사진만을 지도의 핀에 넣는 역할
-    fun getFoodPhotoLocation() : LiveData<List<UserPhoto>>{
-        return repository.getFoodPhotoLocation().asLiveData()
+    val userFoodPhotos : MutableLiveData<List<UserPhoto>> = MutableLiveData()
+
+    suspend fun getFoodPhotoLocation(){
+        foodMapRepository.getFoodPhotoLocation().collect{
+            userFoodPhotos.postValue(it)
+        }
     }
 }
 

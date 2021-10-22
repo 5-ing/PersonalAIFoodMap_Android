@@ -1,30 +1,29 @@
 package com.example.personalaifoodmap.viewmodels
+import android.content.ContentValues.TAG
 import android.provider.MediaStore
+import android.util.Log
 import androidx.lifecycle.*
-import com.example.personalaifoodmap.Event
 import com.example.personalaifoodmap.FoodMapApplication
+import com.example.personalaifoodmap.data.FPlace
 import com.example.personalaifoodmap.data.UserPhoto
 import com.example.personalaifoodmap.repository.GallerySyncRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class GallerySyncViewModel (
     private val repository: GallerySyncRepository
     ) : ViewModel() {
 
-    val userFoodPhotos: LiveData<List<UserPhoto>> = repository.userPhotos.asLiveData()
-    private val _showCompleteMessage = MutableLiveData<Event<Boolean>>()
-    val showCompleteMessage: LiveData<Event<Boolean>> = _showCompleteMessage
 
-    fun startSync(){
-        CoroutineScope(IO).launch {
-            getGalleryCursor()
-            withContext(Main){
-                _showCompleteMessage.value = Event(true)
-            }
+    val syncCompletion = MutableLiveData<Boolean>()
+
+    fun gallerySync(){
+        viewModelScope.launch(Dispatchers.IO) {
+            runCatching {
+                getGalleryCursor()
+            }.getOrNull()?.let{
+                syncCompletion.postValue(true)
+            } ?: syncCompletion.postValue(true)
         }
     }
 
@@ -33,7 +32,7 @@ class GallerySyncViewModel (
     }
 
     fun insertUserPhotoURI(uri : String) {
-        insert(UserPhoto(uri = uri, isFood = false, foodName = "", lat = 0.toFloat(), lon = 0.toFloat()))
+        insert(UserPhoto(uri = uri, isFood = false, foodName = "", lat = 0.toDouble(), lon = 0.toDouble(), fPlace = FPlace("","","","")))
     }
 
     fun getGalleryCursor() {
@@ -49,7 +48,9 @@ class GallerySyncViewModel (
             while (cursor.moveToNext()) {
                 val uri =
                     cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA))
-                uri?.let { insertUserPhotoURI(uri) }
+                uri?.let {
+                    insertUserPhotoURI(uri)
+                }
             }
             cursor.close()
         }
