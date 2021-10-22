@@ -16,7 +16,7 @@ class FoodMapApplication : Application() {
 
     val foodMapRepository by lazy { FoodMapRepository(database.userPhotoDao()) }
     val gallerySyncRepository by lazy { GallerySyncRepository(database.userPhotoDao()) }
-    val restaurantInfoRepository by lazy {RestaurantInfoRepository()}
+    val restaurantInfoRepository by lazy {RestaurantInfoRepository(database.userPhotoDao())}
 
     init{
         instance = this

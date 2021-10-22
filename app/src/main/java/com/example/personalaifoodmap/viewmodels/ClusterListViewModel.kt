@@ -4,6 +4,7 @@ import android.content.ContentValues
 import android.util.Log
 import androidx.lifecycle.*
 import com.example.personalaifoodmap.data.FPlace
+import com.example.personalaifoodmap.data.UserPhoto
 import com.example.personalaifoodmap.repository.RestaurantInfoRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -26,6 +27,16 @@ class ClusterListViewModel(
             }
         }
         return resInfo
+    }
+
+    fun getPhotoInfo(uri: String) : MutableLiveData<UserPhoto>{
+        val photoInfo : MutableLiveData<UserPhoto> = MutableLiveData()
+        viewModelScope.launch {
+            withContext(Dispatchers.IO){
+                photoInfo.postValue(restaurantInfoRepository.getPhotoInfo(uri))
+            }
+        }
+        return photoInfo
     }
 
     fun getRestaurantInfo(lat: Double, lon: Double) : FPlace {

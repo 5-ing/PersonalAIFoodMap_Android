@@ -53,6 +53,7 @@ internal class FoodMapActivity : AppCompatActivity(), OnMapReadyCallback{
     private lateinit var mGoogleMap: GoogleMap
     private lateinit var currentLocation: Location
     private lateinit var clusterManager: ClusterManager<UserPhoto>
+    lateinit var mapFragment:SupportMapFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,7 +64,7 @@ internal class FoodMapActivity : AppCompatActivity(), OnMapReadyCallback{
     }
 
     fun startFoodMap(){
-        val mapFragment:SupportMapFragment = supportFragmentManager.findFragmentById(R.id.foodMapFragment) as SupportMapFragment
+        mapFragment = supportFragmentManager.findFragmentById(R.id.foodMapFragment) as SupportMapFragment
         mapFragment.getMapAsync(this)
     }
 
@@ -107,7 +108,7 @@ internal class FoodMapActivity : AppCompatActivity(), OnMapReadyCallback{
     fun clickClusterItem(){
         clusterManager.setOnClusterItemClickListener{
             val intent = Intent(this,RestaurantDetailActivity::class.java)
-            intent.putExtra("img_info", it)
+            intent.putExtra("resDetail", it)
             startActivity(intent)
             false
         }

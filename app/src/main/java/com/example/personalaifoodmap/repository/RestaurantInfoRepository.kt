@@ -2,8 +2,11 @@ package com.example.personalaifoodmap.repository
 
 import android.content.ContentValues.TAG
 import android.util.Log
+import androidx.exifinterface.media.ExifInterface
 import com.example.personalaifoodmap.BuildConfig
 import com.example.personalaifoodmap.data.FPlace
+import com.example.personalaifoodmap.data.UserPhoto
+import com.example.personalaifoodmap.data.UserPhotoDao
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.BufferedReader
@@ -14,7 +17,15 @@ import java.net.URL
 import java.nio.charset.StandardCharsets
 import java.util.ArrayList
 
-class RestaurantInfoRepository {
+class RestaurantInfoRepository(private val userPhotoDao: UserPhotoDao) {
+
+    suspend fun updateFPlace(userPhoto: UserPhoto) {
+        userPhotoDao.update(userPhoto)
+    }
+
+    fun getPhotoInfo(uri: String): UserPhoto{
+       return userPhotoDao.getPhotoInfo(uri)
+    }
 
     fun getRestInfo(lat: Double, lon: Double): ArrayList<FPlace> {
         val fPlaces: ArrayList<FPlace> = arrayListOf()

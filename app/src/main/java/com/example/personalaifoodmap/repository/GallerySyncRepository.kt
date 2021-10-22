@@ -41,8 +41,6 @@ class GallerySyncRepository(private val userPhotoDao: UserPhotoDao) {
         System.loadLibrary("opencv_java3")
     }
 
-    @Suppress("RedundantSuspendModifier")
-    @WorkerThread
     suspend fun insert(userPhoto: UserPhoto) {
         userPhoto.foodName = imageDetection(userPhoto.uri)
         userPhoto.isFood = userPhoto.foodName != ""

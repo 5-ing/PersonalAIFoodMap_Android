@@ -9,10 +9,12 @@
         android:id="@+id/foodDetailIv"
         android:layout_width="match_parent"
         android:layout_height="300dp"
+        android:scaleType="centerCrop"
         app:layout_constraintTop_toTopOf="parent"
         tools:background="#C4C4C4" />
 
     <ImageButton
+        android:id="@+id/resFixBtn"
         android:layout_width="80dp"
         android:layout_height="20dp"
         android:layout_marginEnd="18dp"
@@ -28,7 +30,8 @@
         android:layout_marginStart="25dp"
         app:layout_constraintStart_toStartOf="@+id/foodDetailIv"
         app:layout_constraintTop_toTopOf="@+id/foodDetailIv"
-        app:layout_constraintBottom_toBottomOf="@+id/foodDetailIv" />
+        app:layout_constraintBottom_toBottomOf="@+id/foodDetailIv"
+        android:visibility="invisible"/>
 
     <ImageView
         android:layout_width="wrap_content"
@@ -37,9 +40,11 @@
         android:src="@drawable/ic_baseline_arrow_forward_ios_24"
         app:layout_constraintEnd_toEndOf="@+id/foodDetailIv"
         app:layout_constraintTop_toTopOf="@+id/foodDetailIv"
-        app:layout_constraintBottom_toBottomOf="@+id/foodDetailIv" />
+        app:layout_constraintBottom_toBottomOf="@+id/foodDetailIv"
+        android:visibility="invisible"/>
 
     <ImageView
+        android:id="@+id/resLeftBtn"
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:src="@drawable/arrow_left_button"
@@ -50,6 +55,7 @@
         app:layout_constraintTop_toBottomOf="@+id/foodDetailIv" />
 
     <ImageView
+        android:id="@+id/resRightBtn"
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:src="@drawable/arrow_right_button"

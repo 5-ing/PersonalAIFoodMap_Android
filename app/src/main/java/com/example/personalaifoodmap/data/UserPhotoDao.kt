@@ -4,13 +4,14 @@ import com.example.personalaifoodmap.data.UserPhoto
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
+import java.net.URI
 
 @Dao
 interface UserPhotoDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(userPhoto: UserPhoto)
 
-    @Update
+    @Update(onConflict = OnConflictStrategy.REPLACE)
     suspend fun update(userPhoto: UserPhoto)
 
     @Delete
@@ -24,6 +25,9 @@ interface UserPhotoDao {
 
     @Query("SELECT * FROM user_photo_table WHERE isFood = :isFood")
     fun getFoodPhoto(isFood: Boolean?): Flow<List<UserPhoto>>
+
+    @Query("SELECT * FROM user_photo_table WHERE uri = :uri")
+    fun getPhotoInfo(uri: String): UserPhoto
 
     @Query("SELECT * FROM user_photo_table WHERE isFood = :isFood AND NOT lat =:lat AND NOT lon =:lon")
     fun getFoodPhotoLocation(isFood: Boolean?, lat: Double, lon: Double): Flow<List<UserPhoto>>

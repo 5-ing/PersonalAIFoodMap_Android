@@ -44,11 +44,11 @@ class ClusterListAdapter(
         holder.clusterIV.setImageURI(item.uri.toUri())
         holder.clusterNameTv.text = item.fPlace.resName
         holder.clusterAddressTv.text = item.fPlace.resAddress
-        holder.itemView.setOnClickListener {
-            val intent = Intent(FoodMapApplication.applicationContext(), RestaurantDetailActivity::class.java)
-            intent.putExtra("resDetail", item)
-            context.startActivity(intent)
-        }
+        holder.bind(item)
+    }
+
+    override fun getItemCount(): Int {
+        return clusterList.size
     }
 
     fun setClusterList(clusterList: ArrayList<UserPhoto>){
@@ -56,13 +56,17 @@ class ClusterListAdapter(
         notifyDataSetChanged()
     }
 
-    override fun getItemCount(): Int {
-        return clusterList.size
-    }
-
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val clusterIV: ImageView = itemView.findViewById(R.id.clusterIV)
         val clusterNameTv: TextView = itemView.findViewById(R.id.restaurantNameTv)
         val clusterAddressTv: TextView = itemView.findViewById(R.id.restaurantAddressTv)
+
+        fun bind(item: UserPhoto){
+            itemView.setOnClickListener {
+                val intent = Intent(FoodMapApplication.applicationContext(),RestaurantDetailActivity::class.java)
+                intent.putExtra("resDetail", item)
+                context.startActivity(intent)
+            }
+        }
     }
 }
