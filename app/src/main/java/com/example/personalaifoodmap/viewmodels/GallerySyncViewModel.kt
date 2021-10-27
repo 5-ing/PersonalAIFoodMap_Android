@@ -3,6 +3,7 @@ import android.content.ContentValues.TAG
 import android.provider.MediaStore
 import android.util.Log
 import androidx.lifecycle.*
+import com.bumptech.glide.load.engine.executor.GlideExecutor.UncaughtThrowableStrategy.LOG
 import com.example.personalaifoodmap.FoodMapApplication
 import com.example.personalaifoodmap.data.FPlace
 import com.example.personalaifoodmap.data.UserPhoto

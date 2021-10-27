@@ -50,6 +50,7 @@ class GallerySyncRepository(private val userPhotoDao: UserPhotoDao) {
 
         Log.e("uri ", userPhoto.uri + userPhoto.foodName)
 
+
         userPhotoDao.insert(userPhoto)
     }
 

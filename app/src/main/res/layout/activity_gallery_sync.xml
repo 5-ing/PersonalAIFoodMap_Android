@@ -10,9 +10,9 @@
         android:id="@+id/syncMessageIv"
         android:layout_width="240dp"
         android:layout_height="40dp"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
         android:layout_marginBottom="60dp"
         android:src="@drawable/sync_message" />
 
