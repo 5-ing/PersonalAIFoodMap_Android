@@ -9,6 +9,7 @@ import com.example.personalaifoodmap.data.UserPhoto
 import com.example.personalaifoodmap.data.UserPhotoDao
 import org.json.JSONArray
 import org.json.JSONObject
+import org.jsoup.Jsoup
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.lang.Exception
@@ -40,7 +41,7 @@ class RestaurantInfoRepository(private val userPhotoDao: UserPhotoDao) {
                     val name = subJobj["place_name"] as String
                     val category = subJobj["category_name"] as String
                     var address = subJobj["road_address_name"] as String
-                    val url = subJobj["place_url"] as String
+                    val url =  getImageUrl(name)
                     if (address.isEmpty()) {
                         address = subJobj["address_name"] as String
                     }
@@ -55,8 +56,43 @@ class RestaurantInfoRepository(private val userPhotoDao: UserPhotoDao) {
         return fPlaces
     }
 
+    fun getImageUrl(name: String) :String{
+        val apiURL = "https://dapi.kakao.com/v2/search/image?query=" + name
+
+        val response = StringBuffer()
+        val auth = "KakaoAK " + BuildConfig.kakao_local_api_key
+        val apiUrl = URL(apiURL)
+        val connection = apiUrl.openConnection() as HttpURLConnection
+
+        connection.requestMethod = "GET"
+        connection.setRequestProperty("X-Requested-With", "curl")
+        connection.setRequestProperty("Authorization", auth)
+        connection.doOutput = true
+
+        val responseCode = connection.responseCode
+
+        if (responseCode == 200) {
+            val charset = StandardCharsets.UTF_8
+            val br = BufferedReader(InputStreamReader(connection.inputStream, charset))
+            var inputLine: String?
+            while (br.readLine().also { inputLine = it } != null) {
+                response.append(inputLine)
+            }
+        }
+        val jImgObj = JSONObject(response.toString())
+        val i_meta = jImgObj["meta"] as JSONObject
+        val i_size = i_meta["total_count"] as Int
+        var imageURL: String = ""
+        if (i_size > 0) {
+            val jImgArr = jImgObj["documents"] as JSONArray
+            val subJImgObj = jImgArr[0] as JSONObject
+            imageURL = subJImgObj["image_url"] as String
+        }
+        return imageURL
+    }
+
     fun getJson(lat: Double, lon: Double): String {
-        val radius = 50 //50m 이내의 음식점 정보 가져오기
+        val radius = 500 //500m 이내의 음식점 정보 가져오기
         val szLat = lat.toString()
         val szLon = lon.toString()
         val url =

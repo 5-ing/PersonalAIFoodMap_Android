@@ -29,25 +29,46 @@ class RestaurantDetailViewModel(
         return photoInfo
     }
 
-    fun getRestaurantTitleInfo(lat: Double, lon: Double) :MutableLiveData<List<FPlace>>{
+    fun getRestaurantDetailInfo(lat: Double, lon: Double) :MutableLiveData<List<FPlace>>{
         val resInfo : MutableLiveData<List<FPlace>> = MutableLiveData()
         viewModelScope.launch {
             withContext(Dispatchers.IO){
-                resInfo.postValue(getRestaurantInfo(lat,lon))
+                resInfo.postValue(getRestaurantInfo(lat,lon, false))
             }
         }
         return resInfo
     }
 
-    fun getRestaurantInfo(lat: Double, lon: Double) : ArrayList<FPlace> {
+    fun getRestaurantRecommendInfo(lat: Double, lon: Double) :MutableLiveData<List<FPlace>>{
+        val resInfo : MutableLiveData<List<FPlace>> = MutableLiveData()
+        viewModelScope.launch {
+            withContext(Dispatchers.IO){
+                resInfo.postValue(getRestaurantInfo(lat,lon, true))
+            }
+        }
+        return resInfo
+    }
+
+    fun getRestaurantInfo(lat: Double, lon: Double, recommend: Boolean) : List<FPlace> {
         val fPlaces = restaurantInfoRepository.getRestInfo(lat, lon)
-        return if(fPlaces.size > 0){
-            restaurantInfoRepository.getRestInfo(lat, lon)
-        } else{
+        if(fPlaces.size > 0 && !recommend){
+            if(fPlaces.size > 5){
+                return fPlaces.subList(0,5)
+            }
+            else{
+                return fPlaces.subList(0,fPlaces.size)
+            }
+
+        }
+        if(fPlaces.size > 5 && recommend){
+            return fPlaces.subList(5, fPlaces.size)
+        }
+        else{
             fPlaces.add(FPlace("알 수 없음","주변에 존재하는 식당이 없습니다","",""))
-            fPlaces
+            return fPlaces
         }
     }
+
 }
 
 class RestaurantDetailViewModelFactory(private val repository: RestaurantInfoRepository) : ViewModelProvider.Factory {

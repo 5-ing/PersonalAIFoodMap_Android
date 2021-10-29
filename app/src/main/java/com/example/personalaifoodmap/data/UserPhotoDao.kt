@@ -8,10 +8,10 @@ import java.net.URI
 
 @Dao
 interface UserPhotoDao {
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(userPhoto: UserPhoto)
 
-    @Update(onConflict = OnConflictStrategy.REPLACE)
+    @Update
     suspend fun update(userPhoto: UserPhoto)
 
     @Delete

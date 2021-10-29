@@ -85,11 +85,13 @@ internal class FoodMapActivity : AppCompatActivity(), OnMapReadyCallback{
         // 마커 표시
         val markerRenderer = MarkerRenderer( this, mGoogleMap, clusterManager)
         clusterManager.renderer = markerRenderer
+
         foodMapViewModel.userFoodPhotos.observe(this, Observer {
             for(userPhoto in it){
                 clusterManager.addItem(userPhoto)
             }
         })
+
     }
 
     fun clickCluster(){

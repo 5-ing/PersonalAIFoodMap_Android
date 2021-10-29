@@ -15,8 +15,8 @@
 
     <ImageButton
         android:id="@+id/resFixBtn"
-        android:layout_width="80dp"
-        android:layout_height="20dp"
+        android:layout_width="98dp"
+        android:layout_height="23dp"
         android:layout_marginEnd="18dp"
         android:layout_marginBottom="10dp"
         android:src="@drawable/restaurant_no_check"
@@ -105,7 +105,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="#D85041"
-        android:textSize="11sp"
+        android:textSize="9sp"
         android:layout_marginTop="7dp"
         app:layout_constraintTop_toBottomOf="@+id/restaurantAddressTv"
         app:layout_constraintStart_toStartOf="@+id/restaurantNameTv"
@@ -134,11 +134,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:text="비슷한 식당들 추천받기" />
 
-    <com.google.android.material.switchmaterial.SwitchMaterial
+    <Switch
         android:id="@+id/recommendSwitch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="10dp"
+        android:thumb="@drawable/ic_x_sign"
+        android:track="@drawable/switch_track"
         app:layout_constraintTop_toBottomOf="@+id/recommendTv"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -164,16 +166,27 @@
     <FrameLayout
         android:id="@+id/recommendFrame"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="150dp"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <TextView
+            android:id="@+id/noticeTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="토글을 켜주시면 근처 500m 이내의 같은 분류의 식당들을 추천해 드려요!"
             android:textSize="11sp"
             android:textColor="#AAAAAA"
             android:layout_gravity="center"/>
+
+        <TextView
+            android:id="@+id/noneTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="주변에 존재하는 식당이 없습니다"
+            android:textSize="11sp"
+            android:textColor="#AAAAAA"
+            android:layout_gravity="center"
+            android:visibility="invisible"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recommendRv"
